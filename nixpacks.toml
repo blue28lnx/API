@@ -2,7 +2,10 @@
 nixPkgs = ["nodejs_20", "pnpm"]
 
 [phases.install]
-cmds = ["pnpm install --frozen-lockfile"]
+cmds = [
+  "pnpm config set onlyBuiltDependencies '[\"@prisma/client\", \"@prisma/engines\", \"bcrypt\", \"prisma\"]' --location project",
+  "pnpm install --frozen-lockfile"
+]
 
 [phases.build]
 cmds = ["pnpm prisma generate", "pnpm build"]
