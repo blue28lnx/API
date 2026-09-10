@@ -2,12 +2,14 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
+  IsEnum,
   IsOptional,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Level } from '@prisma/client';
 
 /**
  * PATCH: todos los campos son opcionales; al menos uno debe venir.
@@ -43,4 +45,9 @@ export class UpdateShortcutDto {
   @IsString()
   @MaxLength(60)
   category?: string;
+
+  @ApiPropertyOptional({ enum: Level, example: Level.INTERMEDIATE })
+  @IsOptional()
+  @IsEnum(Level)
+  level?: Level;
 }

@@ -15,7 +15,6 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CurrentUser, JwtUserPayload } from '../common/decorators/current-user.decorator';
 import { ShortcutsService } from './shortcuts.service';
 import { CreateShortcutDto } from './dto/create-shortcut.dto';
 import { UpdateShortcutDto } from './dto/update-shortcut.dto';
@@ -28,49 +27,39 @@ export class ShortcutsController {
   constructor(private readonly shortcuts: ShortcutsService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Listar mis shortcuts' })
+  @ApiOperation({ summary: 'Listar shortcuts del catálogo' })
   @ApiQuery({ name: 'tool', required: false, example: 'VS Code' })
-  list(
-    @CurrentUser() user: JwtUserPayload,
-    @Query('tool') tool?: string,
-  ) {
-    return this.shortcuts.findAllByUser(user.sub, tool);
+  list(@Query('tool') tool?: string) {
+    return this.shortcuts.findAll(tool);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un shortcut por id' })
   @ApiResponse({ status: 404, description: 'Shortcut no encontrado' })
-  findOne(
-    @CurrentUser() user: JwtUserPayload,
-    @Param('id', new ParseUUIDPipe()) id: string,
-  ) {
-    return this.shortcuts.findOneOwned(user.sub, id);
+  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.shortcuts.findOne(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Crear un shortcut' })
-  create(@CurrentUser() user: JwtUserPayload, @Body() dto: CreateShortcutDto) {
-    return this.shortcuts.create(user.sub, dto);
+  @ApiOperation({ summary: 'Crear un shortcut en el catálogo' })
+  create(@Body() dto: CreateShortcutDto) {
+    return this.shortcuts.create(dto);
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Modificar un shortcut propio' })
+  @ApiOperation({ summary: 'Modificar un shortcut del catálogo' })
   update(
-    @CurrentUser() user: JwtUserPayload,
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() dto: UpdateShortcutDto,
   ) {
-    return this.shortcuts.update(user.sub, id, dto);
+    return this.shortcuts.update(id, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Eliminar un shortcut propio' })
-  remove(
-    @CurrentUser() user: JwtUserPayload,
-    @Param('id', new ParseUUIDPipe()) id: string,
-  ) {
-    return this.shortcuts.remove(user.sub, id);
+  @ApiOperation({ summary: 'Eliminar un shortcut del catálogo' })
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.shortcuts.remove(id);
   }
 }

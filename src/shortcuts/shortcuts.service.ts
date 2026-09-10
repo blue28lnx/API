@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Level, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateShortcutDto } from './dto/create-shortcut.dto';
@@ -29,7 +29,7 @@ export class ShortcutsService {
     tool: string;
     expectedCombo: string;
     category: string | null;
-    userId: string;
+    level: Level;
     createdAt: Date;
     updatedAt: Date;
   }) {
@@ -39,73 +39,75 @@ export class ShortcutsService {
       tool: row.tool,
       expectedCombo: row.expectedCombo.split(COMBO_SEPARATOR),
       category: row.category,
-      userId: row.userId,
+      level: row.level,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     };
   }
 
-  // ---------- CRUD con ownership ----------
+  // ---------- CRUD sobre catálogo global ----------
 
-  /** Lista SOLO los shortcuts del usuario logueado. */
-  async findAllByUser(userId: string, tool?: string) {
-    const where: Prisma.ShortcutWhereInput = { userId };
+  /** Lista todos los shortcuts (catálogo global), con filtro opcional por tool. */
+  async findAll(tool?: string) {
+    const where: Prisma.ShortcutWhereInput = {};
     if (tool) where.tool = tool;
 
     const rows = await this.prisma.shortcut.findMany({
       where,
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ tool: 'asc' }, { action: 'asc' }],
     });
     return rows.map((r) => this.toApi(r));
   }
 
-  async findOneOwned(userId: string, id: string) {
-    const row = await this.prisma.shortcut.findFirst({ where: { id, userId } });
+  async findOne(id: string) {
+    const row = await this.prisma.shortcut.findUnique({ where: { id } });
     if (!row) throw new NotFoundException('Shortcut no encontrado');
     return this.toApi(row);
   }
 
-  async create(userId: string, dto: CreateShortcutDto) {
+  async create(dto: CreateShortcutDto) {
     const row = await this.prisma.shortcut.create({
       data: {
-        userId,
         action: dto.action.trim(),
         tool: dto.tool.trim(),
         expectedCombo: this.serializeCombo(dto.expectedCombo),
         category: dto.category?.trim() ?? null,
+        level: dto.level ?? Level.BEGINNER,
       },
     });
     return this.toApi(row);
   }
 
-  async update(userId: string, id: string, dto: UpdateShortcutDto) {
+  async update(id: string, dto: UpdateShortcutDto) {
     // "Al menos un campo" lo controlamos acá (lógica de negocio, no validación de tipo)
     if (
       dto.action === undefined &&
       dto.tool === undefined &&
       dto.expectedCombo === undefined &&
-      dto.category === undefined
+      dto.category === undefined &&
+      dto.level === undefined
     ) {
       throw new BadRequestException('Debe enviar al menos un campo a actualizar');
     }
 
-    // Ownership: findFirst vs findUnique + chequeo de userId
-    const existing = await this.prisma.shortcut.findFirst({ where: { id, userId } });
+    const existing = await this.prisma.shortcut.findUnique({ where: { id } });
     if (!existing) throw new NotFoundException('Shortcut no encontrado');
 
     const data: Prisma.ShortcutUpdateInput = {};
     if (dto.action !== undefined) data.action = dto.action.trim();
     if (dto.tool !== undefined) data.tool = dto.tool.trim();
-    if (dto.expectedCombo !== undefined) data.expectedCombo = this.serializeCombo(dto.expectedCombo);
+    if (dto.expectedCombo !== undefined)
+      data.expectedCombo = this.serializeCombo(dto.expectedCombo);
     if (dto.category !== undefined) data.category = dto.category?.trim() ?? null;
+    if (dto.level !== undefined) data.level = dto.level;
 
     const updated = await this.prisma.shortcut.update({ where: { id }, data });
     return this.toApi(updated);
   }
 
-  async remove(userId: string, id: string) {
-    const existing = await this.prisma.shortcut.findFirst({
-      where: { id, userId },
+  async remove(id: string) {
+    const existing = await this.prisma.shortcut.findUnique({
+      where: { id },
       select: { id: true },
     });
     if (!existing) throw new NotFoundException('Shortcut no encontrado');

@@ -1,5 +1,5 @@
 import {
-  ForbiddenException,
+  BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -14,18 +14,17 @@ export class PracticeSessionsService {
 
   /**
    * Crea una PracticeSession para el usuario logueado.
-   * Si viene shortcutId, valida que ese shortcut sea del MISMO usuario
-   * (no se puede "sumar" práctica a un shortcut ajeno).
+   * Si viene shortcutId, valida que el shortcut exista (ahora el
+   * catálogo es global, así que alcanza con checkear existencia).
    */
   async create(userId: string, dto: CreatePracticeSessionDto) {
     if (dto.shortcutId) {
-      const owns = await this.prisma.shortcut.findFirst({
-        where: { id: dto.shortcutId, userId },
+      const exists = await this.prisma.shortcut.findUnique({
+        where: { id: dto.shortcutId },
         select: { id: true },
       });
-      if (!owns) {
-        // 403: el recurso existe (o no), pero no es tuyo
-        throw new ForbiddenException('El shortcut indicado no pertenece al usuario');
+      if (!exists) {
+        throw new BadRequestException('El shortcut indicado no existe');
       }
     }
 

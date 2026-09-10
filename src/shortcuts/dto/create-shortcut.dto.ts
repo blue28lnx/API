@@ -2,12 +2,14 @@ import {
   ArrayMinSize,
   ArrayMaxSize,
   IsArray,
+  IsEnum,
   IsOptional,
   IsString,
   MaxLength,
   MinLength,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Level } from '@prisma/client';
 
 export class CreateShortcutDto {
   @ApiProperty({ example: 'Toggle terminal' })
@@ -39,4 +41,13 @@ export class CreateShortcutDto {
   @IsString()
   @MaxLength(60)
   category?: string;
+
+  @ApiPropertyOptional({
+    enum: Level,
+    example: Level.BEGINNER,
+    default: Level.BEGINNER,
+  })
+  @IsOptional()
+  @IsEnum(Level)
+  level?: Level;
 }
