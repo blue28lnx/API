@@ -1,0 +1,282 @@
+[
+  {
+    "id": 1,
+    "description": "Copiar texto seleccionado",
+    "expectedCombo": "Ctrl+C",
+    "tool": "General",
+    "level": 1
+  },
+  {
+    "id": 2,
+    "description": "Pegar contenido",
+    "expectedCombo": "Ctrl+V",
+    "tool": "General",
+    "level": 1
+  },
+  {
+    "id": 3,
+    "description": "Cortar selección",
+    "expectedCombo": "Ctrl+X",
+    "tool": "General",
+    "level": 1
+  },
+  {
+    "id": 4,
+    "description": "Deshacer última acción",
+    "expectedCombo": "Ctrl+Z",
+    "tool": "General",
+    "level": 1
+  },
+  {
+    "id": 5,
+    "description": "Rehacer última acción",
+    "expectedCombo": "Ctrl+Y",
+    "tool": "General",
+    "level": 1
+  },
+  {
+    "id": 6,
+    "description": "Guardar archivo",
+    "expectedCombo": "Ctrl+S",
+    "tool": "General",
+    "level": 1
+  },
+  {
+    "id": 7,
+    "description": "Buscar texto",
+    "expectedCombo": "Ctrl+F",
+    "tool": "General",
+    "level": 1
+  },
+  {
+    "id": 8,
+    "description": "Seleccionar todo",
+    "expectedCombo": "Ctrl+A",
+    "tool": "General",
+    "level": 1
+  },
+  {
+    "id": 9,
+    "description": "Abrir nueva pestaña",
+    "expectedCombo": "Ctrl+T",
+    "tool": "Chrome",
+    "level": 1
+  },
+  {
+    "id": 10,
+    "description": "Cerrar pestaña actual",
+    "expectedCombo": "Ctrl+W",
+    "tool": "Chrome",
+    "level": 1
+  },
+  {
+    "id": 11,
+    "description": "Reabrir última pestaña cerrada",
+    "expectedCombo": "Ctrl+Shift+T",
+    "tool": "Chrome",
+    "level": 2
+  },
+  {
+    "id": 12,
+    "description": "Actualizar página",
+    "expectedCombo": "Ctrl+R",
+    "tool": "Chrome",
+    "level": 1
+  },
+  {
+    "id": 13,
+    "description": "Ir a la barra de direcciones",
+    "expectedCombo": "Ctrl+L",
+    "tool": "Chrome",
+    "level": 1
+  },
+  {
+    "id": 14,
+    "description": "Abrir historial",
+    "expectedCombo": "Ctrl+H",
+    "tool": "Chrome",
+    "level": 2
+  },
+  {
+    "id": 15,
+    "description": "Abrir descargas",
+    "expectedCombo": "Ctrl+J",
+    "tool": "Chrome",
+    "level": 2
+  },
+  {
+    "id": 16,
+    "description": "Abrir modo incógnito",
+    "expectedCombo": "Ctrl+Shift+N",
+    "tool": "Chrome",
+    "level": 2
+  },
+  {
+    "id": 17,
+    "description": "Abrir la paleta de comandos",
+    "expectedCombo": "Ctrl+Shift+P",
+    "tool": "VS Code",
+    "level": 3
+  },
+  {
+    "id": 18,
+    "description": "Abrir archivo rápidamente",
+    "expectedCombo": "Ctrl+P",
+    "tool": "VS Code",
+    "level": 2
+  },
+  {
+    "id": 19,
+    "description": "Buscar en todo el proyecto",
+    "expectedCombo": "Ctrl+Shift+F",
+    "tool": "VS Code",
+    "level": 3
+  },
+  {
+    "id": 20,
+    "description": "Comentar línea",
+    "expectedCombo": "Ctrl+/",
+    "tool": "VS Code",
+    "level": 2
+  },
+  {
+    "id": 21,
+    "description": "Ir a definición",
+    "expectedCombo": "F12",
+    "tool": "VS Code",
+    "level": 3
+  },
+  {
+    "id": 22,
+    "description": "Renombrar símbolo",
+    "expectedCombo": "F2",
+    "tool": "VS Code",
+    "level": 3
+  },
+  {
+    "id": 23,
+    "description": "Abrir terminal integrada",
+    "expectedCombo": "Ctrl+Ñ",
+    "tool": "VS Code",
+    "level": 2
+  },
+  {
+    "id": 24,
+    "description": "Formatear documento",
+    "expectedCombo": "Shift+Alt+F",
+    "tool": "VS Code",
+    "level": 3
+  },
+  {
+    "id": 25,
+    "description": "Ir a una línea específica",
+    "expectedCombo": "Ctrl+G",
+    "tool": "VS Code",
+    "level": 3
+  },
+  {
+    "id": 26,
+    "description": "Abrir explorador de archivos",
+    "expectedCombo": "Ctrl+Shift+E",
+    "tool": "VS Code",
+    "level": 2
+  },
+  {
+    "id": 27,
+    "description": "Abrir control de código fuente",
+    "expectedCombo": "Ctrl+Shift+G",
+    "tool": "VS Code",
+    "level": 3
+  },
+  {
+    "id": 28,
+    "description": "Duplicar línea",
+    "expectedCombo": "Shift+Alt+Down",
+    "tool": "VS Code",
+    "level": 4
+  },
+  {
+    "id": 29,
+    "description": "Mover línea hacia arriba",
+    "expectedCombo": "Alt+Up",
+    "tool": "VS Code",
+    "level": 4
+  },
+  {
+    "id": 30,
+    "description": "Mover línea hacia abajo",
+    "expectedCombo": "Alt+Down",
+    "tool": "VS Code",
+    "level": 4
+  },
+  {
+    "id": 31,
+    "description": "Abrir explorador de archivos",
+    "expectedCombo": "Win+E",
+    "tool": "Windows",
+    "level": 2
+  },
+  {
+    "id": 32,
+    "description": "Abrir ventana Ejecutar",
+    "expectedCombo": "Win+R",
+    "tool": "Windows",
+    "level": 2
+  },
+  {
+    "id": 33,
+    "description": "Bloquear la computadora",
+    "expectedCombo": "Win+L",
+    "tool": "Windows",
+    "level": 2
+  },
+  {
+    "id": 34,
+    "description": "Mostrar escritorio",
+    "expectedCombo": "Win+D",
+    "tool": "Windows",
+    "level": 2
+  },
+  {
+    "id": 35,
+    "description": "Abrir configuración",
+    "expectedCombo": "Win+I",
+    "tool": "Windows",
+    "level": 2
+  },
+  {
+    "id": 36,
+    "description": "Abrir administrador de tareas",
+    "expectedCombo": "Ctrl+Shift+Esc",
+    "tool": "Windows",
+    "level": 3
+  },
+  {
+    "id": 37,
+    "description": "Captura de pantalla",
+    "expectedCombo": "Win+Shift+S",
+    "tool": "Windows",
+    "level": 3
+  },
+  {
+    "id": 38,
+    "description": "Cambiar entre aplicaciones",
+    "expectedCombo": "Alt+Tab",
+    "tool": "Windows",
+    "level": 2
+  },
+  {
+    "id": 39,
+    "description": "Vista de tareas",
+    "expectedCombo": "Win+Tab",
+    "tool": "Windows",
+    "level": 3
+  },
+  {
+    "id": 40,
+    "description": "Crear escritorio virtual",
+    "expectedCombo": "Win+Ctrl+D",
+    "tool": "Windows",
+    "level": 4
+  }
+]
