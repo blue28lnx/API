@@ -11,6 +11,17 @@ datasource db {
 }
 
 // ============================================
+// ENUMS
+// ============================================
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+// ============================================
 // USERS
 // ============================================
 model User {
@@ -21,7 +32,6 @@ model User {
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
 
-  shortcuts         Shortcut[]
   practiceSessions  PracticeSession[]
 
   @@index([email])
@@ -29,7 +39,7 @@ model User {
 }
 
 // ============================================
-// SHORTCUTS (Entidad 1)
+// SHORTCUTS (Entidad 1) — Catálogo global
 // ============================================
 model Shortcut {
   id            String   @id @default(uuid())
@@ -39,19 +49,16 @@ model Shortcut {
   // Trabajamos siempre con array en el DTO y serializamos acá.
   expectedCombo String
   category      String?
-
-  userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  level         Level    @default(BEGINNER)
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   practiceSessions PracticeSession[]
 
-  // Índices: por dueño (filtro casi siempre) y por herramienta
-  @@index([userId])
+  // Índices: por herramienta (filtro casi siempre)
   @@index([tool])
-  @@index([userId, tool])
+  @@index([tool, level])
   @@map("shortcuts")
 }
 
@@ -68,7 +75,7 @@ model PracticeSession {
   userId      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Relación opcional con el shortcut practicado
+  // Relación opcional con el shortcut practicado (catálogo global)
   shortcutId  String?
   shortcut    Shortcut? @relation(fields: [shortcutId], references: [id], onDelete: SetNull)
 
