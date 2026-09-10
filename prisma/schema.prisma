@@ -1,0 +1,81 @@
+// Prisma schema — Shortcuts Trainer
+// Generador y datasource
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USERS
+// ============================================
+model User {
+  id                String           @id @default(uuid())
+  email             String           @unique
+  password          String           // bcrypt hash, nunca se devuelve
+  hashedRefreshToken String?         // hash del refresh token activo (para revocación)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  shortcuts         Shortcut[]
+  practiceSessions  PracticeSession[]
+
+  @@index([email])
+  @@map("users")
+}
+
+// ============================================
+// SHORTCUTS (Entidad 1)
+// ============================================
+model Shortcut {
+  id            String   @id @default(uuid())
+  action        String
+  tool          String
+  // expectedCombo: se persiste como string separado por comas, p. ej. "Ctrl,Shift,P"
+  // Trabajamos siempre con array en el DTO y serializamos acá.
+  expectedCombo String
+  category      String?
+
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  practiceSessions PracticeSession[]
+
+  // Índices: por dueño (filtro casi siempre) y por herramienta
+  @@index([userId])
+  @@index([tool])
+  @@index([userId, tool])
+  @@map("shortcuts")
+}
+
+// ============================================
+// PRACTICE SESSIONS (Entidad 2)
+// ============================================
+model PracticeSession {
+  id          String    @id @default(uuid())
+
+  accuracy    Float     // 0.0 - 1.0
+  timeSpentMs Int
+  mistakes    Int       @default(0)
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relación opcional con el shortcut practicado
+  shortcutId  String?
+  shortcut    Shortcut? @relation(fields: [shortcutId], references: [id], onDelete: SetNull)
+
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([userId, createdAt])
+  @@index([shortcutId])
+  @@map("practice_sessions")
+}
